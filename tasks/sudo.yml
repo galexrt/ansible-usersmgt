@@ -4,7 +4,6 @@
     path: /etc/sudoers
   register: sudoers
   with_items: "{{ users }}"
-  when: (item.only_on_hosts is not defined and item.not_on_hosts is not defined) or (item.only_on_hosts is defined and item.not_on_hosts is defined) or (item.only_on_hosts is defined and inventory_hostname in item.only_on_hosts) or (item.not_on_hosts is defined and inventory_hostname not in item.not_on_hosts)
 
 - name: Create sudoers file backup
   command: cp -f /etc/sudoers /etc/sudoers.bak
@@ -22,7 +21,7 @@
     regexp: '^{{ item.name }}'
     line: "{{ item.name }} ALL=(ALL) {{ item.mode|default('ALL')}}"
     validate: "visudo -q -c -f %s"
-  when: (item.only_on_hosts is not defined and item.not_on_hosts is not defined) or (item.only_on_hosts is defined and item.not_on_hosts is defined) or (item.only_on_hosts is defined and inventory_hostname in item.only_on_hosts) or (item.not_on_hosts is defined and inventory_hostname not in item.not_on_hosts) and sudoers_tmp.rc is defined and sudoers_tmp.rc == 0
+  when: sudoers_tmp.rc is defined and sudoers_tmp.rc == 0
   with_items: "{{ users_sudo }}"
 
 - name: Remove absent sudo users
@@ -31,7 +30,7 @@
     state: absent
     regexp: '^{{ item.name }}'
     validate: "visudo -q -c -f %s"
-  when: (item.only_on_hosts is not defined and item.not_on_hosts is not defined) or (item.only_on_hosts is defined and item.not_on_hosts is defined) or (item.only_on_hosts is defined and inventory_hostname in item.only_on_hosts) or (item.not_on_hosts is defined and inventory_hostname not in item.not_on_hosts) and sudoers_tmp.rc is defined and sudoers_tmp.rc == 0
+  when: sudoers_tmp.rc is defined and sudoers_tmp.rc == 0
   with_items: "{{ users_absent_sudo }}"
 
 - name: Make sure ssh-agent works via sudo

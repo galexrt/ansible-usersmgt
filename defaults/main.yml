@@ -1,5 +1,4 @@
 users: []
-users_ssh: []
 users_sudo: []
 users_absent_sudo: []
 users_absent: []
@@ -7,7 +6,5 @@ users_absent_ssh: []
 users_groups: []
 users_absent_groups: []
 
-users_set_umask: false
-users_umask: "077"
-
-users_ssh_key_directory: "/etc/ssh/authorized_keys"
+users_global_set_umask: false
+users_global_umask: "077"

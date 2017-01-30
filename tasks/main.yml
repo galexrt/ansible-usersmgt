@@ -9,7 +9,5 @@
 
 - include: sudo.yml
 
-- include: ssh.yml
-
 - include: umask.yml
   when: users_set_umask

@@ -43,6 +43,6 @@ Examples
 --------
 For examples on how to use this Ansible role refer to the [EXAMPLES.md](EXAMPLES.md).
 
-TODO List
+ToDo List
 --------
 - [ ] Write tests
