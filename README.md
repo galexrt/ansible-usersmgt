@@ -27,7 +27,7 @@ To use this role you add the following as the name of the role:
 
     - hosts: all
       roles:
-         - { role: galexrt.usersmgt }
+        - { role: galexrt.usersmgt }
 
 License
 -------
