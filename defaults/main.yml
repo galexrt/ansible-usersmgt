@@ -2,8 +2,22 @@
 sudoers_file: /etc/sudoers
 
 users: []
+#  - name: galexrt
+#    test
 users_sudo: []
+#  - name: "%wheel"
+#    mode: "ALL"
+#  - name: example1
+#    mode: "ALL"
+#  - name: example2
+#    mode: "NOPASSWD:ALL"
+
 users_groups: []
+#  - name: example
+#    gid: 420
+#    system: yes
+#  - name: example2
+#    gid: 1337
 
 users_umask_set: false
 users_umask: "077"
