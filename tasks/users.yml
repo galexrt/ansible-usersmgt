@@ -1,4 +1,13 @@
 ---
+- name: Remove absent users
+  user:
+    name: "{{ item.name }}"
+    state: absent
+    comment: "{{ item.comment|default('') }}"
+    uid: "{{ item.uid }}"
+  with_items: "{{ users }}"
+  when: item.state|default('present') != "present"
+
 - name: Create users
   user:
     name: "{{ item.name }}"
@@ -14,3 +23,4 @@
     createhome: "{{ item.createhome|default('yes') }}"
     shell: "{{ item.shell|default('/bin/bash') }}"
   with_items: "{{ users }}"
+  when: item.state|default('present') != "absent"

@@ -1,47 +1,49 @@
 ---
 - name: Stat /etc/sudoers
   stat:
-    path: /etc/sudoers
-  register: sudoers
+    path: "{{ sudoers_file }}"
+  register: stat_sudoers
   with_items: "{{ users }}"
 
-- name: Create sudoers file backup
-  command: cp -f /etc/sudoers /etc/sudoers.bak
-  when: sudoers is defined and sudoers
+ - name: Fail when the sudoers return code is not defined
+  fail:
+    msg: "Error stating sudoers file: {{ sudoers_file }}"
+  when: stat_sudoers.stat is not defined
 
-- name: Copy sudoers file for safety
-  command: cp -f /etc/sudoers /etc/sudoers.tmp
-  register: sudoers_tmp
-  when: sudoers is defined and sudoers
+- name: Create temporary sudoers file
+  command: "cp -f {{ sudoers_file }} /etc/sudoers-tmp-ansible"
+  when: stat_sudoers.stat.exists
+
+- name: Remove absent sudo users
+  lineinfile:
+    dest: /tmp/sudoers-ansible-bak.tmp
+    state: absent
+    regexp: '^{{ item.name }}'
+    validate: "visudo -q -c -f %s"
+  with_items: "{{ users_sudo }}"
 
 - name: Add sudo users
   lineinfile:
-    dest: /etc/sudoers.tmp
+    dest: /tmp/sudoers-ansible-bak.tmp
     state: present
     regexp: '^{{ item.name }}'
     line: "{{ item.name }} ALL=(ALL) {{ item.mode|default('ALL')}}"
     validate: "visudo -q -c -f %s"
-  when: sudoers_tmp.rc is defined and sudoers_tmp.rc == 0
-  with_items: "{{ users_sudo }}"
-
-- name: Remove absent sudo users
-  lineinfile:
-    dest: /etc/sudoers.tmp
-    state: absent
-    regexp: '^{{ item.name }}'
-    validate: "visudo -q -c -f %s"
-  when: sudoers_tmp.rc is defined and sudoers_tmp.rc == 0
-  with_items: "{{ users_absent_sudo }}"
+  with_items: "{{ users }}"
+  when: item.sudo is defined
 
 - name: Make sure ssh-agent works via sudo
   lineinfile:
-    dest: /etc/sudoers.tmp
+    dest: /tmp/sudoers-ansible-bak.tmp
     state: present
     regexp: '^Defaults env_keep\+\=SSH_AUTH_SOCK'
     line: 'Defaults env_keep+=SSH_AUTH_SOCK'
     validate: "visudo -q -c -f %s"
-  when: sudoers_tmp.rc is defined and sudoers_tmp.rc == 0
 
 - name: Copy sudoers file back
-  shell: cp -f /etc/sudoers.tmp /etc/sudoers
-  when: sudoers_tmp.rc is defined and sudoers_tmp.rc == 0
+  command: cp -f /tmp/sudoers-ansible-bak.tmp /etc/sudoers
+
+- name: Remove temporary sudoers backup file
+  file:
+    path: /tmp/sudoers-ansible-bak.tmp
+    state: absent

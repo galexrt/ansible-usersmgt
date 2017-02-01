@@ -1,8 +1,8 @@
 ---
 - name: Create umask.sh file from template
   template:
-    src: "99-umask.sh.j2"
-    dest: "/etc/profile.d/99-umask.sh"
+    src: "01-umask.sh.j2"
+    dest: "/etc/profile.d/01-umask.sh"
     owner: root
     group: root
     mode: 0644

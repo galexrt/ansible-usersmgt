@@ -1,8 +1,4 @@
 ---
-- include: users_removal.yml
-
-- include: groups_removal.yml
-
 - include: groups.yml
 
 - include: users.yml
@@ -10,4 +6,4 @@
 - include: sudo.yml
 
 - include: umask.yml
-  when: users_set_umask
+  when: users_umask_set
