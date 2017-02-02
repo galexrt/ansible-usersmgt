@@ -5,7 +5,7 @@
   register: stat_sudoers
   with_items: "{{ users }}"
 
- - name: Fail when the sudoers return code is not defined
+- name: Fail when the sudoers return code is not defined
   fail:
     msg: "Error stating sudoers file: {{ sudoers_file }}"
   when: stat_sudoers.stat is not defined
