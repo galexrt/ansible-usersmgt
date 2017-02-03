@@ -9,13 +9,9 @@
     msg: "Error stating sudoers file: {{ sudoers_file }}"
   when: not stat_sudoers.stat.exists
 
-- name: Create temporary sudoers file
-  command: "cp -f {{ sudoers_file }} /tmp/sudoers-ansible-bak.tmp"
-  when: stat_sudoers.stat.exists
-
 - name: Add/Remove sudo users
   lineinfile:
-    dest: /tmp/sudoers-ansible-bak.tmp
+    dest: "{{ sudoers_file }}"
     state: "{{ item.state|default('present') }}"
     regexp: '^{{ item.name }}.*$'
     line: "{{ item.name }} ALL=(ALL) {{ item.mode|default('ALL')}}"
@@ -24,7 +20,7 @@
 
 - name: Make sure ssh-agent works via sudo
   lineinfile:
-    dest: /tmp/sudoers-ansible-bak.tmp
+    dest: "{{ sudoers_file }}"
     state: present
     regexp: '^Defaults env_keep\+\=SSH_AUTH_SOCK'
     line: 'Defaults env_keep+=SSH_AUTH_SOCK'
