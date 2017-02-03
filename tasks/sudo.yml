@@ -25,11 +25,3 @@
     regexp: '^Defaults env_keep\+\=SSH_AUTH_SOCK'
     line: 'Defaults env_keep+=SSH_AUTH_SOCK'
     validate: "visudo -q -c -f %s"
-
-- name: Copy sudoers file back
-  command: cp -f /tmp/sudoers-ansible-bak.tmp /etc/sudoers
-
-- name: Remove temporary sudoers backup file
-  file:
-    path: /tmp/sudoers-ansible-bak.tmp
-    state: absent
