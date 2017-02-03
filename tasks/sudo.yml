@@ -3,34 +3,24 @@
   stat:
     path: "{{ sudoers_file }}"
   register: stat_sudoers
-  with_items: "{{ users }}"
 
 - name: Fail when the sudoers return code is not defined
   fail:
     msg: "Error stating sudoers file: {{ sudoers_file }}"
-  when: stat_sudoers.stat is not defined
+  when: not stat_sudoers.stat.exists
 
 - name: Create temporary sudoers file
-  command: "cp -f {{ sudoers_file }} /etc/sudoers-tmp-ansible"
+  command: "cp -f {{ sudoers_file }} /tmp/sudoers-ansible-bak.tmp"
   when: stat_sudoers.stat.exists
 
-- name: Remove absent sudo users
+- name: Add/Remove sudo users
   lineinfile:
     dest: /tmp/sudoers-ansible-bak.tmp
-    state: absent
-    regexp: '^{{ item.name }}'
-    validate: "visudo -q -c -f %s"
-  with_items: "{{ users_sudo }}"
-
-- name: Add sudo users
-  lineinfile:
-    dest: /tmp/sudoers-ansible-bak.tmp
-    state: present
-    regexp: '^{{ item.name }}'
+    state: "{{ item.state|default('present') }}"
+    regexp: '^{{ item.name }}.*$'
     line: "{{ item.name }} ALL=(ALL) {{ item.mode|default('ALL')}}"
     validate: "visudo -q -c -f %s"
-  with_items: "{{ users }}"
-  when: item.sudo is defined
+  with_items: "{{ users_sudo }}"
 
 - name: Make sure ssh-agent works via sudo
   lineinfile:
