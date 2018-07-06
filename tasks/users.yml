@@ -8,10 +8,6 @@
   with_items: "{{ users }}"
   when: item.state|default('present') != "present"
 
-- name: Debug
-  debug:
-    var: users
-
 - name: Create users
   user:
     name: "{{ item.name }}"
@@ -21,7 +17,7 @@
     group: "{{ item.group|default('users') }}"
     non_unique: "{{ item.non_unique|default('no') }}"
     system: "{{ item.system|default('no') }}"
-    groups: "{% if item.groups is defined %}{% for group in item.groups %}{{ group }}{% endfor %}{% endif %}"
+    groups: "{{ item.groups|default([]) }}"
     move_home: "{{ item.system|default('no') }}"
     home: "{{ item.home }}"
     createhome: "{{ item.createhome|default('yes') }}"
