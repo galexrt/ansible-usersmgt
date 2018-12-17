@@ -1,4 +1,10 @@
 ---
+- name: Install sudo
+  action: "{{ ansible_pkg_mgr }}"
+  args:
+    name: sudo
+    state: latest
+
 - name: Stat /etc/sudoers
   stat:
     path: "{{ sudoers_file }}"
