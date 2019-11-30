@@ -1,8 +1,9 @@
 ---
-- name: Create and delete groups
+- name: Create groups
   group:
     gid: "{{ item.gid|default('') }}"
     name: "{{ item.name }}"
     system: "{{ item.system|default('no') }}"
-    state: "{{ item.state|default('present') }}"
+    state: "{{ item.state }}"
   with_items: "{{ users_groups }}"
+  when: item.state == 'present'

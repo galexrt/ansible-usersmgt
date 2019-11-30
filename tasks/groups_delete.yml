@@ -1,0 +1,8 @@
+---
+- name: Delete groups
+  group:
+    gid: "{{ item.gid|default('') }}"
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items: "{{ users_groups }}"
+  when: item.state == 'absent'
