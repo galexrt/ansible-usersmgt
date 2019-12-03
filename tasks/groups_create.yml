@@ -3,7 +3,8 @@
   group:
     gid: "{{ item.gid|default('') }}"
     name: "{{ item.name }}"
-    system: "{{ item.system|default('no') }}"
-    state: "{{ item.state }}"
+    system: "{{ item.system | default('no') }}"
+    state: "{{ item.state | default ('present') }}"
   with_items: "{{ users_groups }}"
-  when: item.state == 'present'
+  when: |
+    item.state | default ('present') == 'present'
