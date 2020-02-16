@@ -1,7 +1,6 @@
 ---
 - name: Install sudo
-  action: "{{ ansible_pkg_mgr }}"
-  args:
+  package:
     name: sudo
     state: latest
 
