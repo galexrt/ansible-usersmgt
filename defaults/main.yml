@@ -23,3 +23,4 @@ users_umask_set: false
 users_umask: "077"
 
 usersmgt_user_default_append: no
+usersmgt_createhome_default: yes

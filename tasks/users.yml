@@ -20,7 +20,7 @@
     groups: "{{ item.groups|default([]) }}"
     move_home: "{{ item.system|default('no') }}"
     home: "{{ item.home }}"
-    createhome: "{{ item.createhome|default('yes') }}"
+    createhome: "{{ item.createhome|default(usersmgt_createhome_default) }}"
     shell: "{{ item.shell|default('/bin/bash') }}"
     append: "{{ item.append|default(usersmgt_user_default_append|default('no')) }}"
   with_items: "{{ users }}"
