@@ -10,15 +10,15 @@ users:
     group: "wheel"
     comment: "Ansible Deployment User"
     system: "yes"
-    shell: "/bin/bash"
+    ansible.builtin.shell: "/bin/bash"
 #  - name: "USER_NAME"
 #    uid: UNIQUE_UID
 #    group: "wheel" # become group
 #    groups: [] # optional
 #    comment: "FULL_NAME"
-#    non_unique: yes
-#    system: no
-#    createhome: yes
+#    non_unique: true
+#    system: false
+#    createhome: true
 ```
 
 ## Remove user(s)
@@ -58,10 +58,10 @@ users_sudo:
 users_groups:
   - name: wheel
     gid: 425
-    system: yes
+    system: true
 #  - name: testgroup
 #    gid: 1111
-#    system: no
+#    system: false
 ```
 
 ## Remove group(s)
@@ -69,5 +69,5 @@ users_groups:
 users_absent_groups:
   - name: backup
     gid: 426
-    system: yes
+    system: true
 ```

@@ -23,9 +23,9 @@ users:
     group: "wheel" # primarygroup
     groups: [] # secondary groups (optional)
     comment: "FULL_NAME" # optional
-    non_unique: yes # optional
-    system: no # optional
-    createhome: yes # optional
+    non_unique: true # optional
+    system: false # optional
+    createhome: true # optional
 
 users_sudo:
   - name: "%wheel"
@@ -38,7 +38,7 @@ users_sudo:
 users_groups:
   - name: example
     gid: 420
-    system: yes
+    system: true
   - name: example2
     gid: 1337
 

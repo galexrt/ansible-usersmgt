@@ -15,12 +15,12 @@ users_sudo: []
 users_groups: []
 #  - name: example
 #    gid: 420
-#    system: yes
+#    system: true
 #  - name: example2
 #    gid: 1337
 
 users_umask_set: false
 users_umask: "077"
 
-usersmgt_user_default_append: no
-usersmgt_createhome_default: yes
+usersmgt_user_default_append: false
+usersmgt_createhome_default: true
