@@ -1,11 +1,11 @@
 ---
-- include: groups_create.yml
+- include_tasks: groups_create.yml
 
-- include: users.yml
+- include_tasks: users.yml
 
-- include: sudo.yml
+- include_tasks: sudo.yml
 
-- include: groups_delete.yml
+- include_tasks: groups_delete.yml
 
-- include: umask.yml
+- include_tasks: umask.yml
   when: users_umask_set
