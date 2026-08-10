@@ -1,21 +1,21 @@
 ---
 - name: Install sudo
-  package:
+  ansible.builtin.package:
     name: sudo
     state: latest
 
 - name: Stat /etc/sudoers
-  stat:
+  ansible.builtin.stat:
     path: "{{ sudoers_file }}"
   register: stat_sudoers
 
 - name: Fail when the sudoers return code is not defined
-  fail:
+  ansible.builtin.fail:
     msg: "Error stating sudoers file: {{ sudoers_file }}"
   when: not stat_sudoers.stat.exists
 
 - name: Add/Remove sudo users
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ sudoers_file }}"
     state: "{{ item.state|default('present') }}"
     regexp: '^{{ item.name }}.*$'
@@ -24,7 +24,7 @@
   with_items: "{{ users_sudo }}"
 
 - name: Make sure ssh-agent works via sudo
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ sudoers_file }}"
     state: present
     regexp: '^Defaults env_keep\+\=SSH_AUTH_SOCK'
